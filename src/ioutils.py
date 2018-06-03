@@ -179,7 +179,7 @@ def write_params(dirname, lowercase, language=None, model='mlp'):
             'model': model}
     if language:
         data['language'] = language
-    with open(path, 'wb') as f:
+    with open(path, 'wb', encoding='utf-8') as f:
         json.dump(data, f)
 
 

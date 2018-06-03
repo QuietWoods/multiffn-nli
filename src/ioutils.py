@@ -179,7 +179,9 @@ def write_params(dirname, lowercase, language=None, model='mlp'):
             'model': model}
     if language:
         data['language'] = language
-    with open(path, 'wb', encoding='utf-8') as f:
+    with open(path, 'w') as f:
+        #print(type(data))
+        #print(type(data['model']))
         json.dump(data, f)
 
 
@@ -188,7 +190,7 @@ def write_label_dict(label_dict, dirname):
     Save the label dictionary to the save directory.
     """
     path = os.path.join(dirname,'label-map.json')
-    with open(path, 'wb') as f:
+    with open(path, 'w') as f:
         json.dump(label_dict, f)
 
 
@@ -207,7 +209,7 @@ def load_params(dirname):
     :return: a dictionary
     """
     path = os.path.join(dirname, 'system-params.json')
-    with open(path, 'rb') as f:
+    with open(path, 'r') as f:
         return json.load(f)
 
 

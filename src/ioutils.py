@@ -11,6 +11,10 @@ import numpy as np
 from collections import defaultdict
 
 import utils
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 import jieba
 
 jieba.load_userdict('/home/project/decomp-attn/mydict/mydict.txt')

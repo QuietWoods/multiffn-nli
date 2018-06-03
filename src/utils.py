@@ -7,17 +7,17 @@ Utility functions.
 """
 
 import logging
-import nltk
+#import nltk
 import os
 import json
 import numpy as np
 import tensorflow as tf
 from collections import Counter
-from nltk.tokenize.regexp import RegexpTokenizer
+#from nltk.tokenize.regexp import RegexpTokenizer
 
 import classifiers
 
-tokenizer = nltk.tokenize.TreebankWordTokenizer()
+#tokenizer = nltk.tokenize.TreebankWordTokenizer()
 UNKNOWN = '**UNK**'
 PADDING = '**PAD**'
 GO = '**GO**'  # it's called "GO" but actually serves as a null alignment
@@ -97,7 +97,7 @@ def tokenize_english(text):
 
     :return: a list of strings
     """
-    return tokenizer.tokenize(text)
+    return None #tokenizer.tokenize(text)
 
 
 def tokenize_portuguese(text):
@@ -121,9 +121,9 @@ def tokenize_portuguese(text):
     -+|                               # any sequence of dashes
     \S                                # any non-space character
     '''
-    tokenizer = RegexpTokenizer(tokenizer_regexp)
+    # tokenizer =  RegexpTokenizer(tokenizer_regexp)
 
-    return tokenizer.tokenize(text)
+    return text # tokenizer.tokenize(text)
 
 
 def tokenize_corpus(pairs):

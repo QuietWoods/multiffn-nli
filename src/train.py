@@ -12,8 +12,9 @@ import tensorflow as tf
 
 import ioutils
 import utils
-from classifiers import LSTMClassifier, MultiFeedForwardClassifier,\
-    DecomposableNLIModel
+from classifiers.lstm import LSTMClassifier
+from classifiers.multimlp import MultiFeedForwardClassifier
+from classifiers.decomposable import DecomposableNLIModel
 
 
 if __name__ == '__main__':

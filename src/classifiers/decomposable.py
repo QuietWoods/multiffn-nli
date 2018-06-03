@@ -443,7 +443,7 @@ class DecomposableNLIModel(object):
         tensorflow_file = os.path.join(dirname, 'model')
         params_file = os.path.join(dirname, 'model-params.json')
 
-        with open(params_file, 'wb') as f:
+        with open(params_file, 'w') as f:
             json.dump(params, f)
 
         saver.save(session, tensorflow_file)

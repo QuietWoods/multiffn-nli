@@ -34,13 +34,13 @@ if __name__ == '__main__':
     parser.add_argument('-b', dest='batch_size', default=32, help='Batch size',
                         type=int)
     parser.add_argument('-u', dest='num_units', help='Number of hidden units',
-                        default=100, type=int)
+                        default=125, type=int)
     parser.add_argument('--no-proj', help='Do not project input embeddings to '
                                           'the same dimensionality used by '
                                           'internal networks',
                         action='store_false', dest='no_project')
     parser.add_argument('-d', dest='dropout', help='Dropout keep probability',
-                        default=1.0, type=float)
+                        default=0.8, type=float)
     parser.add_argument('-c', dest='clip_norm', help='Norm to clip training '
                                                      'gradients',
                         default=100, type=float)
@@ -52,7 +52,7 @@ if __name__ == '__main__':
                                         'embedding model is lowercased)',
                         action='store_true')
     parser.add_argument('--use-intra', help='Use intra-sentence attention',
-                        action='store_true', dest='use_intra')
+                        action='store_true', default=True, dest='use_intra')
     parser.add_argument('--l2', help='L2 normalization constant', type=float,
                         default=0.0)
     parser.add_argument('--report', help='Number of batches between '

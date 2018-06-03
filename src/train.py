@@ -34,7 +34,7 @@ if __name__ == '__main__':
     parser.add_argument('-b', dest='batch_size', default=32, help='Batch size',
                         type=int)
     parser.add_argument('-u', dest='num_units', help='Number of hidden units',
-                        default=125, type=int)
+                        default=200, type=int)
     parser.add_argument('--no-proj', help='Do not project input embeddings to '
                                           'the same dimensionality used by '
                                           'internal networks',
@@ -101,7 +101,9 @@ if __name__ == '__main__':
 
     logger.info('Creating model')
     vocab_size = embeddings.shape[0]
+    print(vocab_size)
     embedding_size = embeddings.shape[1]
+    print(embedding_size)
 
     if args.model == 'mlp':
         model = MultiFeedForwardClassifier(args.num_units, 3, vocab_size,

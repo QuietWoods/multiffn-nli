@@ -126,10 +126,12 @@ class DecomposableNLIModel(object):
 
         # clip the sentences to the length of the longest one in the batch
         # this saves processing time
-        clipped_sent1 = clip_sentence(self.sentence1, self.sentence1_size)
-        clipped_sent2 = clip_sentence(self.sentence2, self.sentence2_size)
-        embedded1 = tf.nn.embedding_lookup(self.embeddings, clipped_sent1)
-        embedded2 = tf.nn.embedding_lookup(self.embeddings, clipped_sent2)
+        #clipped_sent1 = clip_sentence(self.sentence1, self.sentence1_size)
+        #clipped_sent2 = clip_sentence(self.sentence2, self.sentence2_size)
+        #embedded1 = tf.nn.embedding_lookup(self.embeddings, clipped_sent1)
+        #embedded2 = tf.nn.embedding_lookup(self.embeddings, clipped_sent2)
+        embedded1 = tf.nn.embedding_lookup(self.embeddings, self.sentence1)
+        embedded2 = tf.nn.embedding_lookup(self.embeddings, self.sentence2)
         repr1 = self._transformation_input(embedded1)
         repr2 = self._transformation_input(embedded2, True)
 

@@ -165,10 +165,10 @@ def load_text_embeddings(path):
 
             fields = line.split(' ')
             word = fields[0]
-            print(word)
+            # print(word)
             words.append(word)
             vector = np.array([float(x) for x in fields[1:]], dtype=np.float32)
-            print(vector.shape)
+            # print(vector.shape)
             vectors.append(vector)
 
     embeddings = np.array(vectors, dtype=np.float32)

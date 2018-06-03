@@ -96,7 +96,9 @@ if __name__ == '__main__':
                             valid_data.sentences1.shape,
                             valid_data.sentences2.shape))
 
-    sess = tf.InteractiveSession()
+    gpu_options = tf.GPUOptions(allow_growth=True)
+    sess = tf.InteractiveSession(config=tf.ConfigProto(gpu_options=gpu_options))
+
     logger.info('Creating model')
     vocab_size = embeddings.shape[0]
     embedding_size = embeddings.shape[1]

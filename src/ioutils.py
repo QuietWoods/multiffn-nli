@@ -8,10 +8,12 @@ import json
 import os
 import logging
 import numpy as np
-import nltk
 from collections import defaultdict
 
 import utils
+import jieba
+
+jieba.load_userdict('mydict/myditc.txt')
 
 
 def write_word_dict(word_dict, dirname):
@@ -249,39 +251,19 @@ def read_corpus(filename, lowercase, language='en'):
     # the SNLI corpus has one JSON object per line
     with open(filename, 'rb') as f:
 
-        if filename.endswith('.tsv') or filename.endswith('.txt'):
-
-            tokenize = utils.get_tokenizer(language)
+        if filename.endswith('.csv') or filename.endswith('.txt'):
             for line in f:
                 line = line.decode('utf-8').strip()
-                if lowercase:
-                    line = line.lower()
-                sent1, sent2, label = line.split('\t')
-                if label == '-':
-                    continue
-                tokens1 = tokenize(sent1)
-                tokens2 = tokenize(sent2)
+                lineno, sen1, sen2, label = line.split('\t')
+                stopwords = '，。！？*'
+                words1 = [w for w in jieba.cut(sen1) if w.strip() and w not in stopwords]
+                words2 = [w for w in jieba.cut(sen2) if w.strip() and w not in stopwords]
+
+                tokens1 = ' '.join(words1)
+                tokens2 = ' '.join(words2)
                 useful_data.append((tokens1, tokens2, label))
         else:
-            for line in f:
-                line = line.decode('utf-8')
-                if lowercase:
-                    line = line.lower()
-                data = json.loads(line)
-                if data['gold_label'] == '-':
-                    # ignore items without a gold label
-                    continue
-
-                sentence1_parse = data['sentence1_parse']
-                sentence2_parse = data['sentence2_parse']
-                label = data['gold_label']
-
-                tree1 = nltk.Tree.fromstring(sentence1_parse)
-                tree2 = nltk.Tree.fromstring(sentence2_parse)
-                tokens1 = tree1.leaves()
-                tokens2 = tree2.leaves()
-                t = (tokens1, tokens2, label)
-                useful_data.append(t)
+            pass
 
     return useful_data
 

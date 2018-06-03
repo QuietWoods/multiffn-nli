@@ -52,7 +52,7 @@ if __name__ == '__main__':
                                         'embedding model is lowercased)',
                         action='store_true')
     parser.add_argument('--use-intra', help='Use intra-sentence attention',
-                        action='store_true', default=True, dest='use_intra')
+                        action='store_true', dest='use_intra')
     parser.add_argument('--l2', help='L2 normalization constant', type=float,
                         default=0.0)
     parser.add_argument('--report', help='Number of batches between '

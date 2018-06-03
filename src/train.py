@@ -125,6 +125,9 @@ if __name__ == '__main__':
     logger.debug('Total parameters: %d' % total_params)
 
     logger.info('Starting training')
+    print('num_epochs:')
+    print(args.num_epochs)
+    print(args)
     model.train(sess, train_data, valid_data, args.save, args.rate,
                 args.num_epochs, args.batch_size, args.dropout, args.l2,
                 args.clip_norm, args.report)

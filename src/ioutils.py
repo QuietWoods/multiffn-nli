@@ -13,7 +13,7 @@ from collections import defaultdict
 import utils
 import jieba
 
-jieba.load_userdict('/home/project/decomp-attn/mydict/myditc.txt')
+jieba.load_userdict('/home/project/decomp-attn/mydict/mydict.txt')
 
 
 def write_word_dict(word_dict, dirname):

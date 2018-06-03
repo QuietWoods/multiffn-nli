@@ -4,7 +4,7 @@ from __future__ import print_function
 
 import tensorflow as tf
 
-from decomposable import DecomposableNLIModel, mask_3d
+from .decomposable import DecomposableNLIModel, mask_3d
 
 
 class LSTMClassifier(DecomposableNLIModel):

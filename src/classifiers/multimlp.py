@@ -4,7 +4,7 @@ from __future__ import print_function, division
 
 import tensorflow as tf
 
-from decomposable import DecomposableNLIModel, attention_softmax3d
+from .decomposable import DecomposableNLIModel, attention_softmax3d
 
 
 class MultiFeedForwardClassifier(DecomposableNLIModel):

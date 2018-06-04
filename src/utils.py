@@ -15,7 +15,11 @@ import tensorflow as tf
 from collections import Counter
 #from nltk.tokenize.regexp import RegexpTokenizer
 
-import classifiers
+#import classifiers
+from classifiers.lstm import LSTMClassifier
+from classifiers.multimlp import MultiFeedForwardClassifier
+from classifiers.decomposable import DecomposableNLIModel
+
 
 #tokenizer = nltk.tokenize.TreebankWordTokenizer()
 UNKNOWN = '**UNK**'
@@ -219,11 +223,11 @@ def get_model_class(params):
     :return: a subclass of classifiers.DecomposableNLIModel
     """
     if params.get('model') == 'lstm':
-        model_class = classifiers.LSTMClassifier
+        model_class = LSTMClassifier
     else:
-        model_class = classifiers.MultiFeedForwardClassifier
+        model_class = MultiFeedForwardClassifier
 
-    assert issubclass(model_class, classifiers.DecomposableNLIModel)
+    assert issubclass(model_class, DecomposableNLIModel)
     return model_class
 
 

@@ -36,7 +36,7 @@ if __name__ == '__main__':
     parser.add_argument('dataset',
                         help='JSONL or TSV file with data to evaluate on')
     parser.add_argument('embeddings', help='Numpy embeddings file')
-    parser.add_argument('vocabulary',
+    parser.add_argument('-vocabulary',
                         help='Text file with embeddings vocabulary')
     parser.add_argument('-v',
                         help='Verbose', action='store_true', dest='verbose')

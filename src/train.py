@@ -19,7 +19,7 @@ from classifiers.decomposable import DecomposableNLIModel
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('-embeddings', dest='embeddings', default='C:/Users/wl/Downloads/vectors.txt',
+    parser.add_argument('--embeddings', dest='embeddings', default='C:/Users/wl/Downloads/vectors.txt',
                         help='Text or numpy file with word embeddings')
     parser.add_argument('--train', dest='train', default='C:/Users/wl/Downloads/atec_2.0_test.csv',
                         help='JSONL or TSV file with training corpus')
@@ -32,7 +32,7 @@ if __name__ == '__main__':
                         choices=['lstm', 'mlp'])
     parser.add_argument('--vocab', help='Vocabulary file (only needed if numpy'
                                         'embedding file is given)')
-    parser.add_argument('-e', dest='num_epochs', default=10, type=int,
+    parser.add_argument('-e', dest='num_epochs', default=300, type=int,
                         help='Number of epochs')
     parser.add_argument('-b', dest='batch_size', default=32, help='Batch size',
                         type=int)

@@ -128,6 +128,8 @@ class DecomposableNLIModel(object):
         # this saves processing time
         clipped_sent1 = clip_sentence(self.sentence1, self.sentence1_size)
         clipped_sent2 = clip_sentence(self.sentence2, self.sentence2_size)
+        print(clipped_sent1)
+        print(self.embeddings)
         embedded1 = tf.nn.embedding_lookup(self.embeddings, clipped_sent1)
         embedded2 = tf.nn.embedding_lookup(self.embeddings, clipped_sent2)
 
@@ -534,13 +536,38 @@ class DecomposableNLIModel(object):
                     accumulated_loss = 0
                     accumulated_accuracy = 0
                     accumulated_num_items = 0
+                    #
+                    valid_nums = valid_dataset.num_items # valid samples total nums
+                    valid_batchs = valid_nums // batch_size
+                    # print(type(valid_batchs))
+                    valid_acc, valid_loss = 0.0, 0.0
+                    for num_batch in range(0, valid_batchs + 1):
+                        valid_ix1 = batch_size * num_batch
+                        valid_ix2 = valid_ix1 + batch_size
+                        if valid_ix1 >= valid_nums:
+                            break
+                        if valid_ix2 > valid_dataset.num_items:
+                            valid_ix2 = valid_dataset.num_items
+                        # print(valid_dataset.num_items)
+                        # print(valid_ix1, valid_ix2)
 
-                    feeds = self._create_batch_feed(valid_dataset,
-                                                    0, 1, l2, 0)
+                        valid_batch = valid_dataset.get_batch(valid_ix1, valid_ix2)
 
-                    valid_loss, valid_acc = self._run_on_validation(session,
-                                                                    feeds)
+                        # valid_batch = valid_dataset.get_batch(0, batch_size)
+                        feeds = self._create_batch_feed(valid_batch,
+                                                        0, 1, l2, 0)
 
+                        valid_loss_batch, valid_acc_batch = self._run_on_validation(session, feeds)
+                        valid_loss += valid_loss_batch
+                        valid_acc += valid_acc_batch
+
+                    logger.debug('valid_acc: {}'.format(valid_acc))
+                    logger.debug('valid_loss: {}'.format(valid_loss))
+                    valid_acc = valid_acc / valid_nums
+                    valid_loss = valid_loss / valid_nums
+                    # print(type(valid_loss))
+                    logger.debug('valid_acc_average: {}'.format(valid_acc))
+                    logger.debug('valid_loss_average: {}'.format(valid_loss))
                     msg = '%d completed epochs, %d batches' % (i, batch_counter)
                     msg += '\tAvg train loss: %f' % avg_loss
                     msg += '\tAvg train acc: %.4f' % avg_accuracy

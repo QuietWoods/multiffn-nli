@@ -19,13 +19,16 @@ from classifiers.decomposable import DecomposableNLIModel
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('embeddings',
+    parser.add_argument('-embeddings', dest='embeddings', default='C:/Users/wl/Downloads/vectors.txt',
                         help='Text or numpy file with word embeddings')
-    parser.add_argument('train', help='JSONL or TSV file with training corpus')
-    parser.add_argument('validation',
+    parser.add_argument('--train', dest='train', default='C:/Users/wl/Downloads/atec_2.0_test.csv',
+                        help='JSONL or TSV file with training corpus')
+    parser.add_argument('--validation', dest='validation', default='C:/Users/wl/Downloads/atec_2.0_dev.csv',
                         help='JSONL or TSV file with validation corpus')
-    parser.add_argument('save', help='Directory to save the model files')
-    parser.add_argument('model', help='Type of architecture',
+    parser.add_argument('--save', dest='save', default='saved-model',
+                        help='Directory to save the model files')
+    parser.add_argument('--model',dest='model', default='mlp',
+                        help='Type of architecture',
                         choices=['lstm', 'mlp'])
     parser.add_argument('--vocab', help='Vocabulary file (only needed if numpy'
                                         'embedding file is given)')
@@ -58,7 +61,7 @@ if __name__ == '__main__':
     parser.add_argument('--report', help='Number of batches between '
                                          'performance reports',
                         default=100, type=int)
-    parser.add_argument('-v', help='Verbose', action='store_true',
+    parser.add_argument('-v', default=True, help='Verbose', action='store_true',
                         dest='verbose')
     parser.add_argument('--optim', help='Optimizer algorithm',
                         default='adagrad',
@@ -127,9 +130,6 @@ if __name__ == '__main__':
     logger.debug('Total parameters: %d' % total_params)
 
     logger.info('Starting training')
-    print('num_epochs:')
-    print(args.num_epochs)
-    print(args)
     model.train(sess, train_data, valid_data, args.save, args.rate,
                 args.num_epochs, args.batch_size, args.dropout, args.l2,
                 args.clip_norm, args.report)

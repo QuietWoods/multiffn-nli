@@ -563,8 +563,8 @@ class DecomposableNLIModel(object):
 
                     logger.debug('valid_acc: {}'.format(valid_acc))
                     logger.debug('valid_loss: {}'.format(valid_loss))
-                    valid_acc = valid_acc / valid_nums
-                    valid_loss = valid_loss / valid_nums
+                    valid_acc = valid_acc / valid_batchs
+                    valid_loss = valid_loss / valid_batchs
                     # print(type(valid_loss))
                     logger.debug('valid_acc_average: {}'.format(valid_acc))
                     logger.debug('valid_loss_average: {}'.format(valid_loss))

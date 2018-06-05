@@ -166,13 +166,13 @@ if __name__ == '__main__':
                      model.dropout_keep: 1.0}
 
             results = sess.run(ops, feed_dict=feeds)
-            fout.write(results)
-            fout.write('\n')
+            print(results)
+            #fout.write('\n')
             if args.inference:
                 answer = results.pop(0)
-                fout.write(sent1)
+                fout.write(str(sent1.tokens))
                 fout.write('\t')
-                fout.write(sent2)
+                fout.write(str(sent2.tokens))
                 fout.write('\n')
                 fout.write(line.strip())
                 fout.write(lineno)

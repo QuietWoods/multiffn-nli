@@ -17,6 +17,9 @@ from matplotlib import pyplot as pl
 #from .classifiers import multimpl
 import utils
 import ioutils
+import jieba
+
+jieba.load_userdict('mydict/mydict.txt')
 
 
 class SentenceWrapper(object):
@@ -26,12 +29,9 @@ class SentenceWrapper(object):
     """
     def __init__(self, sentence, word_dict, lowercase, language='en'):
         self.sentence = sentence
-        tokenize = utils.get_tokenizer(language)
-        if lowercase:
-            pre_tokenize = sentence.lower()
-        else:
-            pre_tokenize = sentence
-        self.tokens = tokenize(pre_tokenize)
+        stopwords = '，。！？*'
+        words = [w for w in jieba.cut(sentence) if w.strip() and w not in stopwords]
+        self.tokens = words
         self.indices = [word_dict[token] for token in self.tokens_with_null]
         self.padding_index = word_dict[utils.PADDING]
 

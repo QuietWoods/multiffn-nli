@@ -178,4 +178,5 @@ if __name__ == '__main__':
                 fout.write(lineno)
                 fout.write('\t')
                 fout.write(number_to_label[answer[0]])
+    fout.close()
 

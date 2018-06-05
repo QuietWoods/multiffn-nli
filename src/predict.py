@@ -115,6 +115,7 @@ if __name__ == '__main__':
     parser.add_argument('-i', help='Run inference classifier', dest='inference',
                         action='store_true')
     parser.add_argument('-inputfile', help='predict samples')
+    parser.add_argument('-outputfile', help='predict result file')
 
     args = parser.parse_args()
 
@@ -142,6 +143,7 @@ if __name__ == '__main__':
         ops.append(model.inter_att1)
         ops.append(model.inter_att2)
 
+    fout = open(args.outputfile, 'w')
     with open(args.inputfile, 'r') as f:
         for line in f:
             lineno, sent1, sent2, _ = line.strip().split('\t')
@@ -164,9 +166,16 @@ if __name__ == '__main__':
                      model.dropout_keep: 1.0}
 
             results = sess.run(ops, feed_dict=feeds)
-            print(results)
+            fout.write(results)
+            fout.write('\n')
             if args.inference:
                 answer = results.pop(0)
-                print(sent1)
-                print(sent2)
-                print('Model answer:', number_to_label[answer[0]])
+                fout.write(sent1)
+                fout.write('\t')
+                fout.write(sent2)
+                fout.write('\n')
+                fout.write(line.strip())
+                fout.write(lineno)
+                fout.write('\t')
+                fout.write(number_to_label[answer[0]])
+

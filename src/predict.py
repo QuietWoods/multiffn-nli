@@ -14,7 +14,7 @@ import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot as pl
 
-from classifiers import multimlp
+#from .classifiers import multimpl
 import utils
 import ioutils
 
@@ -144,7 +144,7 @@ if __name__ == '__main__':
 
     with open(args.inputfile, 'r') as f:
         for line in f:
-            lineno, sent1, sent2 = line.strip().split('\t')
+            lineno, sent1, sent2, _ = line.strip().split('\t')
             sent1 = sent1.decode('utf-8')
             sent2 = sent2.decode('utf-8')
             sent1 = SentenceWrapper(sent1, word_dict,

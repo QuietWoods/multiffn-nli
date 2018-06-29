@@ -6,10 +6,10 @@ import os
 import argparse
 import tensorflow as tf
 import matplotlib
-matplotlib.use('TKAgg')  # necessary on OS X
+matplotlib.use('Agg')
 from matplotlib import pyplot as pl
 
-from classifiers import MultiFeedForwardClassifier
+from classifiers.multimlp import MultiFeedForwardClassifier
 
 """
 Plot weights in a RTE FF model

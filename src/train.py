@@ -77,8 +77,8 @@ if __name__ == '__main__':
         args = namespace_utils.load_namespace(args.config_path)
     # 实时输出，无缓存
     sys.stdout.flush()
-    print(args)
-    sys.exit(0)
+    logger.debug("参数设置：{}".format(args.__dict__))
+
     logger.debug('Training with following options: %s' % ' '.join(sys.argv))
     train_pairs = ioutils.read_corpus(args.train, args.lower, args.lang)
     valid_pairs = ioutils.read_corpus(args.validation, args.lower, args.lang)

@@ -16,6 +16,7 @@ import namespace_utils
 from classifiers.lstm import LSTMClassifier
 from classifiers.multimlp import MultiFeedForwardClassifier
 from classifiers.decomposable import DecomposableNLIModel
+from atec_data_process import AtecCorpus
 
 
 if __name__ == '__main__':
@@ -80,8 +81,9 @@ if __name__ == '__main__':
     logger.debug("参数设置：{}".format(args.__dict__))
 
     logger.debug('Training with following options: %s' % ' '.join(sys.argv))
-    train_pairs = ioutils.read_corpus(args.train, args.lower, args.lang)
-    valid_pairs = ioutils.read_corpus(args.validation, args.lower, args.lang)
+    atec_corpus = AtecCorpus()
+    train_pairs = atec_corpus.read_corpus(args.train)
+    valid_pairs = atec_corpus.read_corpus(args.validation)
 
     # whether to generate embeddings for unknown, padding, null
     word_dict, embeddings = ioutils.load_embeddings(args.embeddings, args.vocab,
@@ -94,7 +96,7 @@ if __name__ == '__main__':
     train_data = utils.create_dataset(train_pairs, word_dict, label_dict)
     valid_data = utils.create_dataset(valid_pairs, word_dict, label_dict)
 
-    ioutils.write_params(args.save, lowercase=args.lower, language=args.lang,
+    ioutils.write_params(args.save, lowercase=None, language=None,
                          model=args.model)
     ioutils.write_label_dict(label_dict, args.save)
     ioutils.write_extra_embeddings(embeddings, args.save)
@@ -112,9 +114,9 @@ if __name__ == '__main__':
 
     logger.info('Creating model')
     vocab_size = embeddings.shape[0]
-    print(vocab_size)
+    logger.info('vocab_size: {}'.format(vocab_size))
     embedding_size = embeddings.shape[1]
-    print(embedding_size)
+    logger.info('embedding_size: {}'.format(embedding_size))
 
     if args.model == 'mlp':
         model = MultiFeedForwardClassifier(args.num_units, 3, vocab_size,

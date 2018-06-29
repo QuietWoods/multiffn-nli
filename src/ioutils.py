@@ -186,8 +186,6 @@ def write_params(dirname, lowercase, language=None, model='mlp'):
     if language:
         data['language'] = language
     with open(path, 'w') as f:
-        #print(type(data))
-        #print(type(data['model']))
         json.dump(data, f)
 
 

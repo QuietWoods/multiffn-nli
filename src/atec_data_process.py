@@ -5,6 +5,7 @@
 # @Software: PyCharm
 # @Email    ：1258481281@qq.com
 import jieba
+import logging
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -169,6 +170,34 @@ class AtecCorpus(object):
         sent = re.sub(u'蚂蚁借呗', u'借呗', sent)
         sent = re.sub(u'蚂蚁花呗', u'花呗', sent)
         return sent
+
+    def read_corpus(self, filename):
+        """
+        Read a CSV file with the atec corpus
+
+        :param filename: path to the file
+        :return: a list of tuples (first_sent, second_sent, label)
+        """
+        logging.info('Reading data from %s' % filename)
+        # we are only interested in the actual sentences + gold label
+        # the corpus files has a few more things
+        useful_data = []
+
+        # the atec corpus has one JSON object per line
+        with open(filename, 'r') as f:
+            if filename.endswith('.csv') or filename.endswith('.txt'):
+                for line in f:
+                    lineno, sent1, sent2, label = line.strip().decode('utf-8').split('\t')
+                    words1 = self.segment_clear_sentence(sent1)
+                    words2 = self.segment_clear_sentence(sent2)
+                    tokens1 = ' '.join(words1)
+                    tokens2 = ' '.join(words2)
+                    useful_data.append((tokens1, tokens2, label))
+            else:
+                pass
+
+        return useful_data
+
 
 def test_string_re():
     tt = AtecCorpus()

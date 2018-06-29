@@ -12,6 +12,7 @@ import tensorflow as tf
 
 import ioutils
 import utils
+import namespace_utils
 from classifiers.lstm import LSTMClassifier
 from classifiers.multimlp import MultiFeedForwardClassifier
 from classifiers.decomposable import DecomposableNLIModel
@@ -19,35 +20,35 @@ from classifiers.decomposable import DecomposableNLIModel
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--embeddings', dest='embeddings', default='C:/Users/wl/Downloads/vectors.txt',
+    parser.add_argument('--embeddings', default='glove/vectors.txt',
                         help='Text or numpy file with word embeddings')
-    parser.add_argument('--train', dest='train', default='C:/Users/wl/Downloads/atec_2.0_test.csv',
-                        help='JSONL or TSV file with training corpus')
-    parser.add_argument('--validation', dest='validation', default='C:/Users/wl/Downloads/atec_2.0_dev.csv',
-                        help='JSONL or TSV file with validation corpus')
+    parser.add_argument('--train_path', dest='train_path', default='data/train_90000.csv',
+                        help='CSV file with training corpus')
+    parser.add_argument('--dev_path', dest='dev_path', default='data/dev_12477.csv',
+                        help='CSV file with validation corpus')
     parser.add_argument('--save', dest='save', default='saved-model',
                         help='Directory to save the model files')
-    parser.add_argument('--model',dest='model', default='mlp',
+    parser.add_argument('--model_type',dest='model_type', default='lstm',
                         help='Type of architecture',
                         choices=['lstm', 'mlp'])
     parser.add_argument('--vocab', help='Vocabulary file (only needed if numpy'
                                         'embedding file is given)')
-    parser.add_argument('-e', dest='num_epochs', default=300, type=int,
+    parser.add_argument('--num_epochs', dest='num_epochs', default=300, type=int,
                         help='Number of epochs')
-    parser.add_argument('-b', dest='batch_size', default=32, help='Batch size',
+    parser.add_argument('--batch_size', dest='batch_size', default=64, help='Batch size',
                         type=int)
-    parser.add_argument('-u', dest='num_units', help='Number of hidden units',
+    parser.add_argument('--num_units', dest='num_units', help='Number of hidden units',
                         default=200, type=int)
     parser.add_argument('--no-proj', help='Do not project input embeddings to '
                                           'the same dimensionality used by '
                                           'internal networks',
                         action='store_false', dest='no_project')
-    parser.add_argument('-d', dest='dropout', help='Dropout keep probability',
+    parser.add_argument('--dropout', dest='dropout', help='Dropout keep probability',
                         default=0.8, type=float)
-    parser.add_argument('-c', dest='clip_norm', help='Norm to clip training '
+    parser.add_argument('--clip_norm', dest='clip_norm', help='Norm to clip training '
                                                      'gradients',
                         default=100, type=float)
-    parser.add_argument('-r', help='Learning rate', type=float, default=0.001,
+    parser.add_argument('-lr', help='Learning rate', type=float, default=0.001,
                         dest='rate')
     parser.add_argument('--lang', choices=['en', 'pt'], default='en',
                         help='Language (default en; only affects tokenizer)')
@@ -66,11 +67,18 @@ if __name__ == '__main__':
     parser.add_argument('--optim', help='Optimizer algorithm',
                         default='adagrad',
                         choices=['adagrad', 'adadelta', 'adam'])
-
-    args = parser.parse_args()
-
+    # config file
+    parser.add_argument('--config_path', type=str, help='Configuration file.')
+    args, unparsed = parser.parse_known_args()
     utils.config_logger(args.verbose)
     logger = utils.get_logger('train')
+    if args.config_path is not None:
+        logger.info('Loading the configuration from ' + args.config_path)
+        args = namespace_utils.load_namespace(args.config_path)
+    # 实时输出，无缓存
+    sys.stdout.flush()
+    print(args)
+    sys.exit(0)
     logger.debug('Training with following options: %s' % ' '.join(sys.argv))
     train_pairs = ioutils.read_corpus(args.train, args.lower, args.lang)
     valid_pairs = ioutils.read_corpus(args.validation, args.lower, args.lang)

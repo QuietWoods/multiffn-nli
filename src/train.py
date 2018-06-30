@@ -6,6 +6,7 @@ from __future__ import division, print_function
 Script to train an RTE LSTM.
 """
 
+import os
 import sys
 import argparse
 import tensorflow as tf
@@ -83,7 +84,7 @@ if __name__ == '__main__':
     logger.debug('Training with following options: %s' % ' '.join(sys.argv))
     atec_corpus = AtecCorpus()
     train_pairs = atec_corpus.read_corpus(args.train_path)
-    valid_pairs = atec_corpus.read_corpus(args.validation)
+    valid_pairs = atec_corpus.read_corpus(args.dev_path)
 
     # whether to generate embeddings for unknown, padding, null
     word_dict, embeddings = ioutils.load_embeddings(args.embeddings, args.vocab,
@@ -111,6 +112,11 @@ if __name__ == '__main__':
 
     gpu_options = tf.GPUOptions(allow_growth=True)
     sess = tf.InteractiveSession(config=tf.ConfigProto(gpu_options=gpu_options))
+
+    # Create a visualizer object
+    summary_wirter = tf.train.summary.FileWriter('tensorboard', tf.get_default_graph())
+    if not os.path.exists('tensorboard'):
+        os.makedirs('tensorboard')
 
     logger.info('Creating model')
     vocab_size = embeddings.shape[0]

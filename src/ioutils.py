@@ -180,9 +180,11 @@ def write_params(dirname, lowercase, language=None, model='mlp'):
     """
     Write system parameters (not related to the networks) to a file.
     """
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
     path = os.path.join(dirname, 'system-params.json')
     data = {'lowercase': lowercase,
-            'model': model}
+            'model_type': model}
     if language:
         data['language'] = language
     with open(path, 'w') as f:

@@ -98,7 +98,7 @@ if __name__ == '__main__':
     valid_data = utils.create_dataset(valid_pairs, word_dict, label_dict)
 
     ioutils.write_params(args.save, lowercase=None, language=None,
-                         model=args.model)
+                         model=args.model_type)
     ioutils.write_label_dict(label_dict, args.save)
     ioutils.write_extra_embeddings(embeddings, args.save)
 

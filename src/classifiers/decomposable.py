@@ -142,20 +142,24 @@ class DecomposableNLIModel(object):
         self.v1 = self.compare(repr1, self.beta, self.sentence1_size)
         self.v2 = self.compare(repr2, self.alpha, self.sentence2_size, True)
         self.logits = self.aggregate(self.v1, self.v2)
+        tf.summary.scalar('logits', self.logits)
         self.answer = tf.argmax(self.logits, 1, 'answer')
 
         hits = tf.equal(tf.cast(self.answer, tf.int32), self.label)
         self.accuracy = tf.reduce_mean(tf.cast(hits, tf.float32),
                                        name='accuracy')
+        tf.summary.scalar('accuracy', self.accuracy)
         cross_entropy = tf.nn.\
             sparse_softmax_cross_entropy_with_logits(logits=self.logits,
                                                      labels=self.label)
         self.labeled_loss = tf.reduce_mean(cross_entropy)
+        tf.summary.scalar('labeled_loss', self.labeled_loss)
         weights = [v for v in tf.trainable_variables()
                    if 'weight' in v.name]
         l2_partial_sum = sum([tf.nn.l2_loss(weight) for weight in weights])
         l2_loss = tf.multiply(self.l2_constant, l2_partial_sum, 'l2_loss')
         self.loss = tf.add(self.labeled_loss, l2_loss, 'loss')
+        tf.summary.scalar('add_l2_loss', self.loss)
 
         if training:
             self._create_training_tensors(optimizer)
@@ -379,12 +383,15 @@ class DecomposableNLIModel(object):
         init_op = tf.variables_initializer([self.embeddings])
         session.run(init_op, {self.embeddings_ph: embeddings})
 
-    def initialize(self, session, embeddings):
+    def initialize(self, session, embeddings, summary_writer):
         """
         Initialize all tensorflow variables.
         :param session: tensorflow session
         :param embeddings: the contents of the word embeddings
         """
+        self.summary_writer = summary_writer
+        self.summary_op = tf.summary.merge_all()
+
         init_op = tf.global_variables_initializer()
         session.run(init_op, {self.embeddings_ph: embeddings})
 
@@ -521,8 +528,10 @@ class DecomposableNLIModel(object):
                 feeds = self._create_batch_feed(batch, learning_rate,
                                                 dropout_keep, l2, clip_norm)
 
-                ops = [self.train_op, self.loss, self.accuracy]
-                _, loss, accuracy = session.run(ops, feed_dict=feeds)
+                ops = [self.train_op, self.loss, self.accuracy, self.summary_op]
+                summary, _, loss, accuracy = session.run(ops, feed_dict=feeds)
+                self.summary_writer.add_suammry(summary, i)
+
                 accumulated_loss += loss * batch.num_items
                 accumulated_accuracy += accuracy * batch.num_items
                 accumulated_num_items += batch.num_items

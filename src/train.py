@@ -33,7 +33,7 @@ if __name__ == '__main__':
     parser.add_argument('--model_type',dest='model_type', default='lstm',
                         help='Type of architecture',
                         choices=['lstm', 'mlp'])
-    parser.add_argument('--vocab', help='Vocabulary file (only needed if numpy'
+    parser.add_argument('--vocab', default=None, help='Vocabulary file (only needed if numpy'
                                         'embedding file is given)')
     parser.add_argument('--num_epochs', dest='num_epochs', default=300, type=int,
                         help='Number of epochs')
@@ -137,7 +137,7 @@ if __name__ == '__main__':
                                project_input=args.no_project,
                                optimizer=args.optim)
 
-    model.initialize(sess, embeddings)
+    model.initialize(sess, embeddings, summary_wirter)
 
     # this assertion is just for type hinting for the IDE
     assert isinstance(model, DecomposableNLIModel)
@@ -149,3 +149,5 @@ if __name__ == '__main__':
     model.train(sess, train_data, valid_data, args.save, args.rate,
                 args.num_epochs, args.batch_size, args.dropout, args.l2,
                 args.clip_norm, args.report)
+
+    summary_wirter.close()

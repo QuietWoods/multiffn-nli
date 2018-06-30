@@ -82,7 +82,7 @@ if __name__ == '__main__':
 
     logger.debug('Training with following options: %s' % ' '.join(sys.argv))
     atec_corpus = AtecCorpus()
-    train_pairs = atec_corpus.read_corpus(args.train)
+    train_pairs = atec_corpus.read_corpus(args.train_path)
     valid_pairs = atec_corpus.read_corpus(args.validation)
 
     # whether to generate embeddings for unknown, padding, null

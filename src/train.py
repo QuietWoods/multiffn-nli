@@ -41,7 +41,7 @@ if __name__ == '__main__':
                         type=int)
     parser.add_argument('--num_units', dest='num_units', help='Number of hidden units',
                         default=200, type=int)
-    parser.add_argument('--no-proj', help='Do not project input embeddings to '
+    parser.add_argument('--no_project', help='Do not project input embeddings to '
                                           'the same dimensionality used by '
                                           'internal networks',
                         action='store_false', dest='no_project')

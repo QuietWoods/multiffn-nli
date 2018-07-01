@@ -142,7 +142,7 @@ class DecomposableNLIModel(object):
         self.v1 = self.compare(repr1, self.beta, self.sentence1_size)
         self.v2 = self.compare(repr2, self.alpha, self.sentence2_size, True)
         self.logits = self.aggregate(self.v1, self.v2)
-        tf.summary.scalar('logits', self.logits)
+        # tf.summary.scalar('logits', self.logits)
         self.answer = tf.argmax(self.logits, 1, 'answer')
 
         hits = tf.equal(tf.cast(self.answer, tf.int32), self.label)

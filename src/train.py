@@ -30,11 +30,11 @@ if __name__ == '__main__':
                         help='CSV file with validation corpus')
     parser.add_argument('--save', dest='save', default='saved-model',
                         help='Directory to save the model files')
-    parser.add_argument('--model_type',dest='model_type', default='lstm',
+    parser.add_argument('--model_type', dest='model_type', default='lstm',
                         help='Type of architecture',
                         choices=['lstm', 'mlp'])
-    parser.add_argument('--vocab', default=None, help='Vocabulary file (only needed if numpy'
-                                        'embedding file is given)')
+    parser.add_argument('--vocab', default=None,
+                        help='Vocabulary file (only needed if numpy embedding file is given)')
     parser.add_argument('--num_epochs', dest='num_epochs', default=300, type=int,
                         help='Number of epochs')
     parser.add_argument('--batch_size', dest='batch_size', default=64, help='Batch size',
@@ -123,7 +123,7 @@ if __name__ == '__main__':
     embedding_size = embeddings.shape[1]
     logger.info('embedding_size: {}'.format(embedding_size))
 
-    if args.model == 'mlp':
+    if args.model_type == 'mlp':
         model = MultiFeedForwardClassifier(args.num_units, 3, vocab_size,
                                            embedding_size,
                                            use_intra_attention=args.use_intra,

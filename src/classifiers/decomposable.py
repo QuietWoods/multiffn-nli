@@ -103,21 +103,22 @@ class DecomposableNLIModel(object):
         # we have to supply the vocab size to allow validate_shape on the
         # embeddings variable, which is necessary down in the graph to determine
         # the shape of inputs at graph construction time
-        self.embeddings_ph = tf.placeholder(tf.float32, (vocab_size,
+        with tf.name_scope('input'):
+            self.embeddings_ph = tf.placeholder(tf.float32, (vocab_size,
                                                          embedding_size),
                                             'embeddings')
-        # sentence plaholders have shape (batch, time_steps)
-        self.sentence1 = tf.placeholder(tf.int32, (None, None), 'sentence1')
-        self.sentence2 = tf.placeholder(tf.int32, (None, None), 'sentence2')
-        self.sentence1_size = tf.placeholder(tf.int32, [None], 'sent1_size')
-        self.sentence2_size = tf.placeholder(tf.int32, [None], 'sent2_size')
-        self.label = tf.placeholder(tf.int32, [None], 'label')
-        self.learning_rate = tf.placeholder(tf.float32, [],
-                                            name='learning_rate')
-        self.l2_constant = tf.placeholder(tf.float32, [], 'l2_constant')
-        self.clip_value = tf.placeholder(tf.float32, [], 'clip_norm')
-        self.dropout_keep = tf.placeholder(tf.float32, [], 'dropout')
-        self.embedding_size = embedding_size
+            # sentence plaholders have shape (batch, time_steps)
+            self.sentence1 = tf.placeholder(tf.int32, (None, None), 'sentence1')
+            self.sentence2 = tf.placeholder(tf.int32, (None, None), 'sentence2')
+            self.sentence1_size = tf.placeholder(tf.int32, [None], 'sent1_size')
+            self.sentence2_size = tf.placeholder(tf.int32, [None], 'sent2_size')
+            self.label = tf.placeholder(tf.int32, [None], 'label')
+            self.learning_rate = tf.placeholder(tf.float32, [],
+                                                name='learning_rate')
+            self.l2_constant = tf.placeholder(tf.float32, [], 'l2_constant')
+            self.clip_value = tf.placeholder(tf.float32, [], 'clip_norm')
+            self.dropout_keep = tf.placeholder(tf.float32, [], 'dropout')
+            self.embedding_size = embedding_size
 
         # we initialize the embeddings from a placeholder to circumvent
         # tensorflow's limitation of 2 GB nodes in the graph
@@ -146,8 +147,9 @@ class DecomposableNLIModel(object):
         self.answer = tf.argmax(self.logits, 1, 'answer')
 
         hits = tf.equal(tf.cast(self.answer, tf.int32), self.label)
-        self.accuracy = tf.reduce_mean(tf.cast(hits, tf.float32),
-                                       name='accuracy')
+        with tf.name_scope('accuracy'):
+            self.accuracy = tf.reduce_mean(tf.cast(hits, tf.float32),
+                                           name='accuracy')
         tf.summary.scalar('accuracy', self.accuracy)
         cross_entropy = tf.nn.\
             sparse_softmax_cross_entropy_with_logits(logits=self.logits,
@@ -157,8 +159,9 @@ class DecomposableNLIModel(object):
         weights = [v for v in tf.trainable_variables()
                    if 'weight' in v.name]
         l2_partial_sum = sum([tf.nn.l2_loss(weight) for weight in weights])
-        l2_loss = tf.multiply(self.l2_constant, l2_partial_sum, 'l2_loss')
-        self.loss = tf.add(self.labeled_loss, l2_loss, 'loss')
+        with tf.name_scope('l2_loss'):
+            l2_loss = tf.multiply(self.l2_constant, l2_partial_sum, 'l2_loss')
+            self.loss = tf.add(self.labeled_loss, l2_loss, 'loss')
         tf.summary.scalar('add_l2_loss', self.loss)
 
         if training:

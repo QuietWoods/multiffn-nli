@@ -114,8 +114,8 @@ if __name__ == '__main__':
     sess = tf.InteractiveSession(config=tf.ConfigProto(gpu_options=gpu_options))
 
     # Create a visualizer object
-    # train_writer = tf.summary.FileWriter('tensorboard' + '/train', sess.graph)
-    train_writer = tf.summary.FileWriter('tensorboard' + '/train', tf.get_default_graph())
+    train_writer = tf.summary.FileWriter('tensorboard' + '/train', sess.graph)
+    # train_writer = tf.summary.FileWriter('tensorboard' + '/train', tf.get_default_graph())
     test_writer = tf.summary.FileWriter('tensorboard' + '/test')
 
     logger.info('Creating model')

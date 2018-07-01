@@ -151,3 +151,4 @@ if __name__ == '__main__':
 
     train_writer.close()
     test_writer.close()
+    logger.info('Train finished!')

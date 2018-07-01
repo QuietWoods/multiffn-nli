@@ -530,7 +530,7 @@ class DecomposableNLIModel(object):
                                                 dropout_keep, l2, clip_norm)
 
                 ops = [self.train_op, self.loss, self.accuracy, self.summary_op]
-                summary, _, loss, accuracy = session.run(ops, feed_dict=feeds)
+                _, loss, accuracy, summary = session.run(ops, feed_dict=feeds)
                 self.train_writer.add_summary(summary, i)
 
                 accumulated_loss += loss * batch.num_items
@@ -570,7 +570,7 @@ class DecomposableNLIModel(object):
                         valid_loss_batch, valid_acc_batch, valid_batch_summary = self._run_on_validation(session, feeds)
                         valid_loss += valid_loss_batch
                         valid_acc += valid_acc_batch
-                        self.test_writer.add_summary(summary, num_batch)
+                        self.test_writer.add_summary(valid_batch_summary, num_batch)
 
                     logger.debug('valid_acc: {}'.format(valid_acc))
                     logger.debug('valid_loss: {}'.format(valid_loss))

@@ -383,13 +383,14 @@ class DecomposableNLIModel(object):
         init_op = tf.variables_initializer([self.embeddings])
         session.run(init_op, {self.embeddings_ph: embeddings})
 
-    def initialize(self, session, embeddings, summary_writer):
+    def initialize(self, session, embeddings, train_writer, test_writer):
         """
         Initialize all tensorflow variables.
         :param session: tensorflow session
         :param embeddings: the contents of the word embeddings
         """
-        self.summary_writer = summary_writer
+        self.train_writer = train_writer
+        self.test_writer = test_writer
         self.summary_op = tf.summary.merge_all()
 
         init_op = tf.global_variables_initializer()
@@ -481,8 +482,8 @@ class DecomposableNLIModel(object):
 
         :return: a tuple (validation_loss, validation_acc)
         """
-        loss, acc = session.run([self.loss, self.accuracy], feeds)
-        return loss, acc
+        loss, acc, summary = session.run([self.loss, self.accuracy, self.summary_op], feeds)
+        return loss, acc, summary
 
     def train(self, session, train_dataset, valid_dataset, save_dir,
               learning_rate, num_epochs, batch_size, dropout_keep=1, l2=0,
@@ -530,7 +531,7 @@ class DecomposableNLIModel(object):
 
                 ops = [self.train_op, self.loss, self.accuracy, self.summary_op]
                 summary, _, loss, accuracy = session.run(ops, feed_dict=feeds)
-                self.summary_writer.add_suammry(summary, i)
+                self.train_writer.add_suammry(summary, i)
 
                 accumulated_loss += loss * batch.num_items
                 accumulated_accuracy += accuracy * batch.num_items
@@ -566,9 +567,10 @@ class DecomposableNLIModel(object):
                         feeds = self._create_batch_feed(valid_batch,
                                                         0, 1, l2, 0)
 
-                        valid_loss_batch, valid_acc_batch = self._run_on_validation(session, feeds)
+                        valid_loss_batch, valid_acc_batch, valid_batch_summary = self._run_on_validation(session, feeds)
                         valid_loss += valid_loss_batch
                         valid_acc += valid_acc_batch
+                        self.test_writer.add_summary(summary, num_batch)
 
                     logger.debug('valid_acc: {}'.format(valid_acc))
                     logger.debug('valid_loss: {}'.format(valid_loss))

@@ -531,7 +531,7 @@ class DecomposableNLIModel(object):
 
                 ops = [self.train_op, self.loss, self.accuracy, self.summary_op]
                 summary, _, loss, accuracy = session.run(ops, feed_dict=feeds)
-                self.train_writer.add_suammry(summary, i)
+                self.train_writer.add_summary(summary, i)
 
                 accumulated_loss += loss * batch.num_items
                 accumulated_accuracy += accuracy * batch.num_items

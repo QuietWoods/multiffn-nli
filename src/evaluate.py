@@ -59,8 +59,8 @@ if __name__ == '__main__':
     model.initialize_embeddings(sess, embeddings)
     label_dict = ioutils.load_label_dict(args.model)
 
-    pairs = ioutils.read_corpus(args.dataset, params['lowercase'],
-                                params['language'])
+    pairs = ioutils.read_corpus(args.dataset, None,
+                                None)
     dataset = utils.create_dataset(pairs, word_dict, label_dict)
     loss, acc, answers = model.evaluate(sess, dataset, True)
     print('Loss: %f' % loss)

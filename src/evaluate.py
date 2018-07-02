@@ -62,7 +62,7 @@ if __name__ == '__main__':
     pairs = ioutils.read_corpus(args.dataset, None,
                                 None)
     dataset = utils.create_dataset(pairs, word_dict, label_dict)
-    loss, acc, answers = model.evaluate(sess, dataset, True)
+    loss, acc, answers = model.evaluate(sess, dataset, True, batch_size=500)
     print('Loss: %f' % loss)
     print('Accuracy: %f' % acc)
 

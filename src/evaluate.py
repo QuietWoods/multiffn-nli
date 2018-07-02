@@ -8,6 +8,7 @@ import tensorflow as tf
 
 import utils
 import ioutils
+from atec_data_process import AtecCorpus
 
 """
 Evaluate the performance of an NLI model on a dataset
@@ -61,8 +62,9 @@ if __name__ == '__main__':
     model.initialize_embeddings(sess, embeddings)
     label_dict = ioutils.load_label_dict(args.model)
 
-    pairs = ioutils.read_corpus(args.dataset, None,
-                                None)
+    # pairs = ioutils.read_corpus(args.dataset, None, None)
+    atec_data = AtecCorpus()
+    pairs = atec_data.read_corpus(args.dataset)
     dataset = utils.create_dataset(pairs, word_dict, label_dict)
     loss, acc, answers = model.evaluate(sess, dataset, True, batch_size=500)
     print('Loss: %f' % loss)

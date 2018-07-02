@@ -19,15 +19,17 @@ def print_errors(pairs, answers, label_dict):
     Print the pairs for which the model gave a wrong answer,
     their gold label and the system one.
     """
+    wrong_anser_result = open('wrong_anser_result.txt', 'w')
     for pair, answer in izip(pairs, answers):
         label_str = pair[2]
         label_number = label_dict[label_str]
         if answer != label_number:
             sent1 = ' '.join(pair[0])
             sent2 = ' '.join(pair[1])
-            print('Sent 1: {}\nSent 2: {}'.format(sent1, sent2))
-            print('System label: {}, gold label: {}'.format(answer,
+            wrong_anser_result.write('Sent 1: {}\nSent 2: {}'.format(sent1, sent2))
+            wrong_anser_result.write('System label: {}, gold label: {}'.format(answer,
                                                             label_number))
+    wrong_anser_result.close()
 
 
 if __name__ == '__main__':

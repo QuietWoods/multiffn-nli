@@ -29,7 +29,7 @@ class SentenceWrapper(object):
     """
     def __init__(self, sentence, word_dict):
         self.sentence = sentence
-        words = atec_data.read_corpus(sentence)
+        words = atec_data.segment_clear_sentence(sentence)
         self.tokens = words
         self.indices = [word_dict[token] for token in self.tokens_with_null]
         self.padding_index = word_dict[utils.PADDING]

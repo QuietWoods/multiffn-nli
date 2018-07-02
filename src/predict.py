@@ -17,9 +17,9 @@ from matplotlib import pyplot as pl
 #from .classifiers import multimpl
 import utils
 import ioutils
-import jieba
+from atec_data_process import AtecCorpus
 
-jieba.load_userdict('mydict/mydict.txt')
+atec_data = AtecCorpus()
 
 
 class SentenceWrapper(object):
@@ -27,10 +27,9 @@ class SentenceWrapper(object):
     Class for the basic sentence preprocessing needed to make it readable
     by the networks.
     """
-    def __init__(self, sentence, word_dict, lowercase, language='en'):
+    def __init__(self, sentence, word_dict):
         self.sentence = sentence
-        stopwords = '，。！？*'
-        words = [w for w in jieba.cut(sentence) if w.strip() and w not in stopwords]
+        words = atec_data.read_corpus(sentence)
         self.tokens = words
         self.indices = [word_dict[token] for token in self.tokens_with_null]
         self.padding_index = word_dict[utils.PADDING]
@@ -153,10 +152,8 @@ if __name__ == '__main__':
             #                         params['lowercase'], params['language'])
             # sent2 = SentenceWrapper(sent2, word_dict,
             #                         params['lowercase'], params['language'])
-            sent1 = SentenceWrapper(sent1, word_dict,
-                                    None, None)
-            sent2 = SentenceWrapper(sent2, word_dict,
-                                    None, None)
+            sent1 = SentenceWrapper(sent1, word_dict)
+            sent2 = SentenceWrapper(sent2, word_dict)
 
             vector1 = sent1.convert_sentence()
             vector2 = sent2.convert_sentence()

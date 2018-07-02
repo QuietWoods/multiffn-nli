@@ -149,10 +149,14 @@ if __name__ == '__main__':
             lineno, sent1, sent2, _ = line.strip().split('\t')
             sent1 = sent1.decode('utf-8')
             sent2 = sent2.decode('utf-8')
+            # sent1 = SentenceWrapper(sent1, word_dict,
+            #                         params['lowercase'], params['language'])
+            # sent2 = SentenceWrapper(sent2, word_dict,
+            #                         params['lowercase'], params['language'])
             sent1 = SentenceWrapper(sent1, word_dict,
-                                    params['lowercase'], params['language'])
+                                    None, None)
             sent2 = SentenceWrapper(sent2, word_dict,
-                                    params['lowercase'], params['language'])
+                                    None, None)
 
             vector1 = sent1.convert_sentence()
             vector2 = sent2.convert_sentence()
@@ -166,15 +170,10 @@ if __name__ == '__main__':
                      model.dropout_keep: 1.0}
 
             results = sess.run(ops, feed_dict=feeds)
-            #print(results)
-            #fout.write('\n')
+
             if args.inference:
                 answer = results.pop(0)
-                #fout.write(str(sent1.tokens))
-                #fout.write('\t')
-                #fout.write(str(sent2.tokens))
-                #fout.write('\n')
-                #fout.write(line.strip())
+
                 fout.write(lineno)
                 fout.write('\t')
                 fout.write(number_to_label[answer[0]])

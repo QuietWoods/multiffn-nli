@@ -26,8 +26,8 @@ def print_errors(pairs, answers, label_dict):
         if answer != label_number:
             sent1 = ' '.join(pair[0])
             sent2 = ' '.join(pair[1])
-            wrong_anser_result.write('Sent 1: {}\nSent 2: {}'.format(sent1, sent2))
-            wrong_anser_result.write('System label: {}, gold label: {}'.format(answer,
+            wrong_anser_result.write('Sent 1: {}\nSent 2: {}\n'.format(sent1, sent2))
+            wrong_anser_result.write('System label: {}, gold label: {}\n'.format(answer,
                                                             label_number))
     wrong_anser_result.close()
 

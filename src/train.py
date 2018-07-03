@@ -113,11 +113,6 @@ if __name__ == '__main__':
     gpu_options = tf.GPUOptions(allow_growth=True)
     sess = tf.InteractiveSession(config=tf.ConfigProto(gpu_options=gpu_options))
 
-    # Create a visualizer object
-    train_writer = tf.summary.FileWriter('tensorboard' + '/train', sess.graph)
-    # train_writer = tf.summary.FileWriter('tensorboard' + '/train', tf.get_default_graph())
-    test_writer = tf.summary.FileWriter('tensorboard' + '/test')
-
     logger.info('Creating model')
     vocab_size = embeddings.shape[0]
     logger.info('vocab_size: {}'.format(vocab_size))
@@ -137,7 +132,7 @@ if __name__ == '__main__':
                                project_input=args.no_project,
                                optimizer=args.optim)
 
-    model.initialize(sess, embeddings, train_writer, test_writer)
+    model.initialize(sess, embeddings)
 
     # this assertion is just for type hinting for the IDE
     assert isinstance(model, DecomposableNLIModel)
@@ -150,6 +145,4 @@ if __name__ == '__main__':
                 args.num_epochs, args.batch_size, args.dropout, args.l2,
                 args.clip_norm, args.report)
 
-    train_writer.close()
-    test_writer.close()
     logger.info('Train finished!')

@@ -143,7 +143,7 @@ class DecomposableNLIModel(object):
         self.v1 = self.compare(repr1, self.beta, self.sentence1_size)
         self.v2 = self.compare(repr2, self.alpha, self.sentence2_size, True)
         self.logits = self.aggregate(self.v1, self.v2)
-        # tf.summary.scalar('logits', self.logits)
+        tf.summary.histogram('logits', self.logits)
         self.answer = tf.argmax(self.logits, 1, 'answer')
 
         hits = tf.equal(tf.cast(self.answer, tf.int32), self.label)
@@ -386,15 +386,16 @@ class DecomposableNLIModel(object):
         init_op = tf.variables_initializer([self.embeddings])
         session.run(init_op, {self.embeddings_ph: embeddings})
 
-    def initialize(self, session, embeddings, train_writer, test_writer):
+    def initialize(self, session, embeddings):
         """
         Initialize all tensorflow variables.
         :param session: tensorflow session
         :param embeddings: the contents of the word embeddings
         """
-        self.train_writer = train_writer
-        self.test_writer = test_writer
         self.summary_op = tf.summary.merge_all()
+        # Create a visualizer object
+        self.train_writer = tf.summary.FileWriter('tensorboard' + '/train', session.graph)
+        self.test_writer = tf.summary.FileWriter('tensorboard' + '/test')
 
         init_op = tf.global_variables_initializer()
         session.run(init_op, {self.embeddings_ph: embeddings})
@@ -594,6 +595,10 @@ class DecomposableNLIModel(object):
                         msg += '\t(saved model)'
 
                     logger.info(msg)
+
+        self.train_writer.close()
+        self.test_writer.close()
+
 
     def evaluate(self, session, dataset, return_answers, batch_size=5000):
         """

@@ -589,7 +589,7 @@ class DecomposableNLIModel(object):
                     msg += '\tValidation loss: %f' % valid_loss
                     msg += '\tValidation acc: %.4f' % valid_acc
 
-                    if valid_acc > best_acc:
+                    if valid_acc > best_acc and i > 25:
                         best_acc = valid_acc
                         self.save(save_dir, session, saver)
                         msg += '\t(saved model)'

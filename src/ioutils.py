@@ -17,7 +17,7 @@ sys.setdefaultencoding('utf-8')
 
 import jieba
 
-jieba.load_userdict('/home/project/decomp-attn/mydict/mydict.txt')
+jieba.load_userdict('mydict/mydict.txt')
 
 
 def write_word_dict(word_dict, dirname):

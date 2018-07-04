@@ -9,10 +9,10 @@ Interactive evaluation for the RTE networks.
 import argparse
 import tensorflow as tf
 import numpy as np
-import matplotlib
+#import matplotlib
 #matplotlib.use('TKAgg')  # necessary on OS X
-matplotlib.use('Agg')
-from matplotlib import pyplot as pl
+#matplotlib.use('Agg')
+#from matplotlib import pyplot as pl
 
 #from .classifiers import multimpl
 import utils
@@ -82,25 +82,25 @@ def print_attention(tokens1, tokens2, attention):
         print(line)
 
 
-def plot_attention(tokens1, tokens2, attention):
-    """
-    Print a colormap showing attention values from tokens 1 to
-    tokens 2.
-    """
-    len1 = len(tokens1)
-    len2 = len(tokens2)
-    extent = [0, len2, 0, len1]
-    pl.matshow(attention, extent=extent, aspect='auto')
-    ticks1 = np.arange(len1) + 0.5
-    ticks2 = np.arange(len2) + 0.5
-    pl.xticks(ticks2, tokens2, rotation=45)
-    pl.yticks(ticks1, reversed(tokens1))
-    ax = pl.gca()
-    ax.xaxis.set_ticks_position('bottom')
-    pl.colorbar()
-    pl.title('Alignments')
-    #pl.show(block=False)
-    pl.savefig('Alignments.png')
+#def plot_attention(tokens1, tokens2, attention):
+#    """
+#    Print a colormap showing attention values from tokens 1 to
+#    tokens 2.
+#    """
+#    len1 = len(tokens1)
+#    len2 = len(tokens2)
+#    extent = [0, len2, 0, len1]
+#    pl.matshow(attention, extent=extent, aspect='auto')
+#    ticks1 = np.arange(len1) + 0.5
+#    ticks2 = np.arange(len2) + 0.5
+#    pl.xticks(ticks2, tokens2, rotation=45)
+#    pl.yticks(ticks1, reversed(tokens1))
+#    ax = pl.gca()
+#    ax.xaxis.set_ticks_position('bottom')
+#    pl.colorbar()
+#    pl.title('Alignments')
+#    #pl.show(block=False)
+#    pl.savefig('Alignments.png')
 
 
 if __name__ == '__main__':
